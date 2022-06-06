@@ -3,9 +3,10 @@ const config = require("./../config");
 const onlyBasicData = (data) => {
   return {
     author: config.author,
-    categories: data.available_filters
-      .find((filter) => filter.id === "category")
-      .values.map((category) => category.name),
+    categories:
+      data.filters
+        .find((filter) => filter.id === "category")
+        ?.values[0]?.path_from_root?.map((category) => category.name) || [],
     items: data.results.map((item) => {
       const price = item.prices.prices.find(
         (price) => price.type === "standard"
