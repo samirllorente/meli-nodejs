@@ -11,7 +11,7 @@ const getProduct = async (req, res) => {
     .then((response) => {
       res.status(200).send(mapper.onlyBasicData(response.data));
     })
-    .catch(function (error) {
+    .catch((error) => {
       res.status(503).send(error);
     });
 };
@@ -35,7 +35,7 @@ const getProductById = async (req, res) => {
           res.status(200).send(mapper.onlyBasicDataById(data));
         });
     })
-    .catch(function (error) {
+    .catch((error) => {
       res.status(503).send(error);
     });
 };
