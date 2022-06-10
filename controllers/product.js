@@ -18,16 +18,22 @@ const getProduct = async (req, res) => {
 
 const getProductById = async (req, res) => {
   const id = req.params.id;
-  Promise.all([
+  Promise.allSettled([
     axios.get(constants.searchItemById.replace(":id", id)),
     axios.get(constants.getItemDescriptionById.replace(":id", id)),
   ])
     .then((response) => {
       const data = {
-        ...response[0].data,
-        description: response[1].data.plain_text,
+        ...response[0]?.value?.data,
+        description:
+          response[1]?.value?.data?.plain_text || constants.withoutDescription,
       };
-      res.status(200).send(mapper.onlyBasicDataById(data));
+      axios
+        .get(constants.getCategoryById.replace(":id", data.category_id))
+        .then((categoriesResponse) => {
+          data.categories = categoriesResponse.data;
+          res.status(200).send(mapper.onlyBasicDataById(data));
+        });
     })
     .catch(function (error) {
       res.status(503).send(error);

@@ -30,6 +30,7 @@ const onlyBasicData = (data) => {
 const onlyBasicDataById = (data) => {
   return {
     author: config.author,
+    categories: data.categories.path_from_root.map((category) => category.name),
     item: {
       id: data.id,
       title: data.title,
